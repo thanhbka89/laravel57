@@ -63,7 +63,7 @@ Route::get('query-log', function() {
 	//get ip
 	$clientIP = Request::getClientIp(true);
 	var_dump($clientIP);
-	
+
 	// $users = DB::table("users")->toSql();
 	// dd($users);
 
@@ -77,7 +77,7 @@ Route::get('query-log', function() {
 
 #Post -> We make use of named routes here, which we shall be using shortly in our forms.
 Route::get('/posts', 'PostController@index');
-Route::post('/posts', 'PostController@create');
+Route::post('/post', 'PostController@create');
 Route::get('/posts/{id}', 'PostController@read')->name('edit.post');
 Route::put('/posts/{id}', 'PostController@update')->name('update.post');
 Route::delete('/posts/{id}', 'PostController@delete')->name('destroy.post');

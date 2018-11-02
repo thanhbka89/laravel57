@@ -90,8 +90,8 @@
             <div class="links">
                 <a href="https://laravel.com/docs">{{ __('label.doc') }}</a>
                 <a href="https://laravel-news.com">{{ __('label.new') }}</a>
-          </div>
-      </div>
-  </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

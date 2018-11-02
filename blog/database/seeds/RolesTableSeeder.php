@@ -12,15 +12,23 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        $roles = [
-           'member',
-           'admin',
-           'superadmin'
+        $permissions = [
+           'role-list',
+           'role-create',
+           'role-edit',
+           'role-delete',
+           'product-list',
+           'product-create',
+           'product-edit',
+           'product-delete'
         ];
+        $role = Role::create(['name' => 'superadmin']); //Tao role
+        $role->givePermissionTo($permissions); //Gan permission vao role
 
+        $role = Role::create(['name' => 'admin']);
+        $role->givePermissionTo('product-list', 'product-create', 'product-edit', 'product-delete');
 
-        foreach ($roles as $role) {
-             Role::create(['name' => $role]);
-        }
+        $role = Role::create(['name' => 'member']);
+        $role->givePermissionTo('product-list');
     }
 }

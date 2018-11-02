@@ -32,7 +32,8 @@ class DevController extends Controller
 
 		   $name = 'Krunal';
 		   Mail::to('krunal@appdividend.com')->send(new SendMailablePost($name));
-		   
+           Log::info('Email was sent');
+
 		   return 'Email was sent';
 		} catch(Exception $ex) {
 			Log::info('Error'. $e->getMessage());
@@ -45,7 +46,7 @@ class DevController extends Controller
 	public function sendMailMarkdown()
 	{
 		$content = [
-    		'title'=> 'Itsolutionstuff.com mail', 
+    		'title'=> 'Itsolutionstuff.com mail',
     		'body'=> 'The body of your message.',
     		'button' => 'Click Here'
     		];
