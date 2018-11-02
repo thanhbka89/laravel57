@@ -17,7 +17,9 @@ class PermissionController extends Controller
 
     public function index() 
     {
-        $permissions = Permission::all();
+        //$permissions = Permission::all();
+        $permissions = Permission::orderby('id', 'desc')->paginate(5);
+
         return view('permissions.index')->with('permissions', $permissions);
     }
     
