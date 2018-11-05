@@ -6,16 +6,20 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
+use App\Services\RoleService;
+use App\Http\Requests\RoleRequest;
 
 class RoleController extends Controller
 {
-     function __construct()
+    protected $roleService;
+    function __construct(RoleService $roleService)
     {
         $this->middleware('permission:role-list');
         $this->middleware('permission:role-create', ['only' => ['create','store']]);
         $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:role-delete', ['only' => ['destroy']]);
         $this->middleware(['auth', 'isAdmin']);
+        $this->roleService = $roleService;
      }
 
     /**
@@ -25,10 +29,12 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = Role::orderBy('id','DESC')->paginate(5);
+        $itemsPerPage = 5;
+        //$roles = Role::orderBy('id','DESC')->paginate(itemsPerPage);
+        $roles = $this->roleService->paginate($itemsPerPage);
 
         return view('roles.index',compact('roles'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+            ->with('i', ($request->input('page', 1) - 1) * $itemsPerPage);
     }
 
     /**
@@ -50,14 +56,17 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    //public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|unique:roles,name',
-            'permission' => 'required',
-        ]);
+        // $this->validate($request, [
+        //     'name' => 'required|unique:roles,name',
+        //     'permission' => 'required',
+        // ]);
 
-        $role = Role::create(['name' => $request->input('name')]);
+        // $role = Role::create(['name' => $request->input('name')]);
+
+        $role = $this->roleService->create($request);
         $role->syncPermissions($request->input('permission'));
 
         return redirect()->route('roles.index')
@@ -88,8 +97,10 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
+        //Eloquent 
         $role = Role::find($id);
         $permission = Permission::get();
+        //Query Builder
         $rolePermissions = DB::table("role_has_permissions")
             ->where("role_has_permissions.role_id",$id)
             ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
@@ -130,9 +141,10 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        DB::table("roles")->where('id',$id)->delete();
+        //DB::table("roles")->where('id',$id)->delete();
+        $this->roleService->delete($id);
 
         return redirect()->route('roles.index')
-                        ->with('success','Role deleted successfully');
+                         ->with('success','Role deleted successfully');
     }
 }

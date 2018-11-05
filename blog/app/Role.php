@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Spatie\Permission\Models\Role;
-
-class Role extends Role
+class Role extends \Spatie\Permission\Models\Role
 {
     //
 }

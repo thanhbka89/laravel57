@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Services\UserService;
 
-
 class UserController extends Controller
 {
     protected $userService;
