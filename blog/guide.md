@@ -64,7 +64,13 @@ https://allaravel.com/laravel-tutorials/laravel-eloquent-orm-phan-1-thao-tac-voi
     -->Sau do chay lenh : php artisan event:generate
 
 #Queue
-- Chay queue : php artisan queue:work
+- Chay queue (thuc thi job trong Queue) : php artisan queue:work
+- Mặc định job sẽ được thực hiện 1 lần, nếu lỗi sẽ được bỏ qua, để thiết lập số lần thử thực hiện lại một job chúng ta có hai cách: hoặc sử dụng câu lệnh artisan cho tất cả các job
+    php artisan queue:work --tries=3
+- Chú ý, câu lệnh này khi đã thực hiện sẽ chạy cho đến khi đóng cửa sổ dòng lệnh hoặc dừng nó bằng một câu lệnh. Queue worker là các tiến trình có thời gian sống dài do đó nó sẽ không cập nhật code khi có thay đổi, khi bạn thay đổi code chương trình, bạn cần khởi động lại queue worker bằng câu lệnh : php artisan queue:restart
+- Số giây job có thể chạy trước khi timeout : php artisan queue:work --timeout=60
+
+php artisan queue:restart
 
 #Scheduler 
 
@@ -79,6 +85,7 @@ https://laravelcode.com/post/laravel-56-prevent-block-multiple-login-of-same-cre
 https://chungnguyen.xyz/posts/laravel-request-lifecycle-laravel-hoat-dong-nhu-the-nao-ban-biet-chua
 https://github.com/alexeymezenin/laravel-best-practices
 https://blog.eduonix.com/web-programming-tutorials/learn-using-repositories-services-laravel-5/
+https://storyofsu.com/ac-mong-mang-ten-coding-conventions/
 
 #Laravel Mix
 - chay Laravel Mix: quản lý tất cả tài nguyên (assets) như img, css, js trong dự án của bạn, đồng thời nó dự trên base là webpack build tất cả các file css, js pre-processors như SCSS, SASS thành css, chuyển ES6 thành ES5 (trình duyệt không hiểu cú pháp ES6).
@@ -101,6 +108,12 @@ php artisan route:list
 
 
 #B3 >>> Others
+
+#PHP Trait : PHP chỉ cho phép mỗi class thừa kế từ tối đa là 1 class khác.trong khi trait có thể hỗ trợ đa kế thừa.
+
+#PHP Generator : thuật ngữ được PHP hỗ trợ từ phiên bản 5.5 trở lên, nó hỗ trợ chúng ta có thể truy xuất dến dữ liệu trong mảng mà không cần lưu trữ mảng trên bộ nhớ.
+https://viblo.asia/p/traits-va-generator-trong-php-djeZ1DbmKWz
+
 #Git
 - Git cung cấp file .gitignore để bỏ qua những file không quan trọng mà dev không muốn tracking, ví dụ như khi code android bằng android studio thì hàng loạt file build hoặc gradle được tạo ra, trong trường hợp đó sử dụng gitignore rất hữu ích để bảo git không tracking những file không cần thiết.
 Tuy nhiên giả sử trường hợp cập nhật file .gitignore để untrack 1 file đã cập nhật trước đó thì lại xảy ra trường hợp git vẫn tracking file mà mình vừa cập nhật trong .gitignore.
@@ -108,4 +121,15 @@ Nếu gặp trường hợp này cần xoá cached của git , và commit lại 
     git rm -r --cached .  #remove các files có trong git cache rồi cập nhật gitignore
     git add .             #add tất cả những file được cho phép
     git commit -m "fixed untracked files"
+
+#XDebug
+- Tai extension xdebug ung voi phien ban php dang su dung : https://xdebug.org/download.php 
+- Copy file php_xdebug.dll vao thu muc ext trong php 
+- Edit file php.ini , them vao dong :
+    extesion=xdebug 
+    xdebug.remote_enable=1
+    xdebug.remote_handler=dbgp
+    xdebug.remote_host=127.0.0.1
+    xdebug.remote_port=9000
+    xdebug.remote_log="/var/log/xdebug/xdebug.log"
 

@@ -28,11 +28,6 @@ Route::get('logs', function() {
 	return $lastActivity->description; //returns 'Hey!, I logged something';
 });
 
-#Event and Queue - https://vegibit.com/8-steps-to-success-with-laravel-events/
-#https://www.phpflow.com/php/event-and-listeners-example-using-laravel-5-6/
-Route::get('event','DevController@testEvent')->name('test.event');
-
-
 #AdminLTE theme
 Route::get('my-theme', function () {
 
@@ -82,9 +77,22 @@ Route::get('/posts/{id}', 'PostController@read')->name('edit.post');
 Route::put('/posts/{id}', 'PostController@update')->name('update.post');
 Route::delete('/posts/{id}', 'PostController@delete')->name('destroy.post');
 
+
+### DEV
 #Test send email
 Route::get('/send-email', 'DevController@mail');
 Route::get('sendmail-markdown', 'DevController@sendMailMarkdown');
 
 #Chunk : https://laravel-news.com/eloquent-tips-tricks
 Route::get('chunk-user', 'DevController@chunkUser');
+
+#Event and Queue - https://vegibit.com/8-steps-to-success-with-laravel-events/
+#https://www.phpflow.com/php/event-and-listeners-example-using-laravel-5-6/
+Route::get('event','DevController@testEvent')->name('test.event');
+
+#Cached
+Route::get('test_cache', 'DevController@chunkUser');
+Route::get('test_non_cache', 'DevController@testNonCache');
+
+#Generator
+Route::get('test_generator', 'DevController@testGenerator');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Log;
 use Exception;
+use Cache;
 use Illuminate\Http\Request;
 use App\Events\TestEvent;
 use Illuminate\Support\Facades\Mail;
@@ -13,6 +14,10 @@ use App\User;
 
 class DevController extends Controller
 {
+    function __construct () {
+
+    }
+
 	public function testEvent(){
 		try {
 
@@ -66,4 +71,45 @@ class DevController extends Controller
 			}
 		});
 	}
+
+    public function testNonCache()
+    {
+        $users = User::all();
+
+        return response()->json($users);
+    }
+
+    public function testUseCache()
+    {
+        $users = Cache::remember('users', 22*60, function() {
+            return User::all();
+        });
+
+        return response()->json($users);
+    }
+
+    #Generator
+    private function myGenerator($max) {
+        $array = [];
+        for ($i=0; $i < $max; $i++) {
+            //$array[] = $i;
+            yield $i;
+        }
+        //return $array;
+
+    }
+
+    public function testGenerator() {
+        $start_time = microtime(true);
+        $total = 0;
+        foreach ($this->myGenerator(1000000) as $value) {
+            $total += $value;
+        }
+        $end_time = microtime(true);
+        echo "Total: ", $total, PHP_EOL;
+        echo "Thời gian thực hiện: ", bcsub($end_time, $start_time, 4), PHP_EOL;
+        echo "Bộ nhớ sử dụng (kb): ", memory_get_peak_usage(true)/1024, PHP_EOL;
+    }
+
+
 }
