@@ -94,3 +94,13 @@ B1: Dinh nghia - php artisan make:event OrderPayment
 B2: Tao event listener - php artisan make:listener SendEmailAfterOrderPayment --event="OrderPayment"
 B3: Dang ky event trong app/Providers/EventServiceProvider.php
 -->Sau do chay lenh : php artisan event:generate
+
+#B3 >>> Others
+#Git
+- Git cung cấp file .gitignore để bỏ qua những file không quan trọng mà dev không muốn tracking, ví dụ như khi code android bằng android studio thì hàng loạt file build hoặc gradle được tạo ra, trong trường hợp đó sử dụng gitignore rất hữu ích để bảo git không tracking những file không cần thiết.
+Tuy nhiên giả sử trường hợp cập nhật file .gitignore để untrack 1 file đã cập nhật trước đó thì lại xảy ra trường hợp git vẫn tracking file mà mình vừa cập nhật trong .gitignore.
+Nếu gặp trường hợp này cần xoá cached của git , và commit lại . Thực hiện theo các câu lệnh dưới đây, truy cập thư mục code, mở console gõ :
+    git rm -r --cached .  #remove các files có trong git cache rồi cập nhật gitignore
+    git add .             #add tất cả những file được cho phép
+    git commit -m "fixed untracked files"
+
