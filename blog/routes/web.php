@@ -96,3 +96,7 @@ Route::get('test_non_cache', 'DevController@testNonCache');
 
 #Generator
 Route::get('test_generator', 'DevController@testGenerator');
+
+#QueryBuilder
+Route::get('test_qb', 'DevController@testQueryBuilder');
+

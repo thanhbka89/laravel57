@@ -27,6 +27,40 @@
 #B2: >>> Programing
 
 #Database
+https://allaravel.com/laravel-tutorials/lam-viec-voi-co-so-du-lieu-trong-laravel/
+https://allaravel.com/laravel-tutorials/laravel-eloquent-orm-phan-2-xu-ly-database-relationship/
+https://allaravel.com/laravel-tutorials/xay-dung-truy-van-bang-laravel-query-builder/
+
+#Transaction
+Giao dịch (transaction) là một nhóm các hành động có thứ tự trên CSDL nhưng lại được người dùng xem như là một đơn vị thao tác duy nhất. Ví dụ: một giao dịch thanh toán trực tuyến cho một món hàng trên mạng sẽ bao gồm nhiều hành động trên CSDL:
+
+Trừ tiền từ tài khoản người dùng.
+Cộng tiền vào tài khoản nhà cung cấp.
+Giảm số lượng hàng trong kho.
+
+Khi đó, bất kỳ một hành động nào bị lỗi sẽ dẫn đến giao dịch lỗi. Trong thực tế khi lập trình, người ta thường nhóm các nhiều các hành động trên CSDL vào thành một nhóm và thực hiện chúng như một giao dịch, nếu một hành động lỗi, hệ thống sẽ thực hiện các lệnh sao cho quay về trạng thái ban đầu (rollback). Laravel cũng hỗ trợ quản lý transaction, thực hiện chúng khá đơn giản với cú pháp:
+
+DB::transaction(function () {
+    DB::table('users')->update(['votes' => 1]);
+
+    DB::table('posts')->delete();
+}, 5);
+Chú ý tham số thứ 2 của phương thức transaction() là số lần thử thực hiện lại khi gặp tình trạng deadlock.
+
+Ngoài ra bạn có thể thao tác quản lý transaction một cách thủ công như khi nào mới rollback hoặc khi nào mới commit một cách tùy ý:
+
+DB::beginTransaction();
+// Bắt đầu các hành động trên CSDL
+
+...
+//Gặp lỗi nào đó mới rollback
+DB::rollBack();
+...
+
+//Commit dữ liệu khi hoàn thành kiểm tra
+DB::commit();
+
+#Migration
 - Tao migration file :
     php artisan make:migration create_category_product_table --create=category_product
 
@@ -62,6 +96,9 @@ https://allaravel.com/laravel-tutorials/laravel-eloquent-orm-phan-1-thao-tac-voi
     B2: Tao event listener --> php artisan make:listener SendEmailAfterOrderPayment --event="OrderPayment"
     B3: Dang ky event trong app/Providers/EventServiceProvider.php
     -->Sau do chay lenh : php artisan event:generate
+
+- Links :
+    https://allaravel.com/laravel-tutorials/quan-ly-su-kien-trong-ung-dung-voi-laravel-event/
 
 #Queue
 - Chay queue (thuc thi job trong Queue) : php artisan queue:work

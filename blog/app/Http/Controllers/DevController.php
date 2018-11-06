@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Log;
 use Exception;
 use Cache;
+use DB;
 use Illuminate\Http\Request;
 use App\Events\TestEvent;
 use Illuminate\Support\Facades\Mail;
@@ -111,5 +112,11 @@ class DevController extends Controller
         echo "Bộ nhớ sử dụng (kb): ", memory_get_peak_usage(true)/1024, PHP_EOL;
     }
 
+    public function testQueryBuilder($value='')
+    {
+        #get column in table
+        $users = DB::table('users')->pluck('id', 'name');
 
+        return response()->json($users);
+    }
 }
