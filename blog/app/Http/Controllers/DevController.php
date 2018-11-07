@@ -119,4 +119,31 @@ class DevController extends Controller
 
         return response()->json($users);
     }
+
+    public function testAccessor($value='')
+    {
+        #get column in table
+        $user = User::findorfail(1);
+
+        return response()->json($user->full_name);
+    }
+
+    public function testBenmarkBuildAndORM($value='')
+    {
+        #use Eloquent ORM
+        $start_time = microtime(true);
+        $users = User::all();
+        $end_time = microtime(true);
+        echo "Thời gian thực hiện Eloquent ORM: ", bcsub($end_time, $start_time, 4), PHP_EOL;
+        echo "Bộ nhớ sử dụng (kb): ", memory_get_peak_usage(true)/1024, PHP_EOL;
+        echo '<br>------<br>';
+
+        #use QueryBuilder
+        $start_time = microtime(true);
+        $users = DB::table('users')->get();
+        $end_time = microtime(true);
+        echo "Thời gian thực hiện QueryBuilder: ", bcsub($end_time, $start_time, 4), PHP_EOL;
+        echo "Bộ nhớ sử dụng (kb): ", memory_get_peak_usage(true)/1024, PHP_EOL;
+        echo '<br>------<br>';
+    }
 }

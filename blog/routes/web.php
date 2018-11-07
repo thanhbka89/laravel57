@@ -99,4 +99,8 @@ Route::get('test_generator', 'DevController@testGenerator');
 
 #QueryBuilder
 Route::get('test_qb', 'DevController@testQueryBuilder');
+Route::get('test_benmark', 'DevController@testBenmarkBuildAndORM');
+
+#Accessor
+Route::get('test_accessor', 'DevController@testAccessor');
 

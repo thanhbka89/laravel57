@@ -29,6 +29,7 @@
 #Database
 https://allaravel.com/laravel-tutorials/lam-viec-voi-co-so-du-lieu-trong-laravel/
 https://allaravel.com/laravel-tutorials/laravel-eloquent-orm-phan-2-xu-ly-database-relationship/
+https://allaravel.com/laravel-tutorials/laravel-eloquent-orm-phan-3-xu-ly-du-lieu-dau-ra/
 https://allaravel.com/laravel-tutorials/xay-dung-truy-van-bang-laravel-query-builder/
 
 #Transaction
@@ -46,19 +47,6 @@ DB::transaction(function () {
     DB::table('posts')->delete();
 }, 5);
 Chú ý tham số thứ 2 của phương thức transaction() là số lần thử thực hiện lại khi gặp tình trạng deadlock.
-
-Ngoài ra bạn có thể thao tác quản lý transaction một cách thủ công như khi nào mới rollback hoặc khi nào mới commit một cách tùy ý:
-
-DB::beginTransaction();
-// Bắt đầu các hành động trên CSDL
-
-...
-//Gặp lỗi nào đó mới rollback
-DB::rollBack();
-...
-
-//Commit dữ liệu khi hoàn thành kiểm tra
-DB::commit();
 
 #Migration
 - Tao migration file :
@@ -80,10 +68,34 @@ php artisan make:model Post -m -c --resource
 - Tao model va file migrations :
 php artisan make:model Category -m
 
-#ORM(Object Relational Mapping) là một kỹ thuật lập trình dùng để chuyển đổi dữ liệu giữa một hệ thống không hướng đối tượng như cơ sở dữ liệu sang hệ thống hướng đối tượng như lập trình hướng đôi tượng trong PHP.
+- Mutator và Accessor : tự động định dạng các giá trị khi lấy lên hoặc trước khi lưu vào cơ sở dữ liệu, ví dụ: bạn muốn một trường nào đó trước khi lưu xuống cơ sở dữ liệu sẽ được mã hóa lại và khi lấy từ cơ sở dữ liệu lên sẽ tự động thực hiện giải mã.
+    + Accessor : là phương thức sẽ được gọi đến khi truy xuất một thuộc tính của đối tượng, để định nghĩa Accessor, sử dụng phương thức có tên với quy tắc sau [get][Tên thuộc tính][Attribute]
+    + Mutator : thay đổi dữ liệu trước khi lưu xuống database
+- $casts (sử dụng trong model) : Chuyển đổi dạng dữ liệu của thuộc tính
+    + Chuyển đổi dạng Array là rất hữu ích khi chúng ta làm việc với cột được lưu trữ ở dạng chuỗi JSON, khi thêm chuyển đổi dạng này vào $casts, nó sẽ tự động chuyển từ dữ liệu JSON sang thành mảng khi chúng ta truy cập vào thuộc tính của Model
+
+#Eloquent ORM và Query Builder : thao tác với CSDL
+- Query Builder
+    + Query Builder sử dụng PDO nhằm bảo vệ ưng dụng và tránh các lỗi về SQL injection.Query Builder xây dựng lớp Illuminate\Support\Facades\DBđể thực hiện các câu truy vấn.
+    + Sử dụng thao tác trực tiếp với bảng
+    + Có câu lệnh viết phức tạp hơn nhưng cũng có thể thể thực hiện các truy vấn phức tạp
+    + Tốc độ thực hiện truy vấn nhanh hơn
+- ORM(Object Relational Mapping) là một kỹ thuật lập trình dùng để chuyển đổi dữ liệu giữa một hệ thống không hướng đối tượng như cơ sở dữ liệu sang hệ thống hướng đối tượng như lập trình hướng đôi tượng trong PHP.
+    + Mỗi bảng của database sẽ được ánh xạ qua ‘Model’, mỗi Model sẽ được kế thừa từ Illuminate\Database\Eloquent\Model;
+    + Cung cấp ActiveRecord đầy đủ.
+    + Các câu lệnh của Eloquent ORM là ngắn gọn, dễ hiểu và dễ sử dụng hơn.
+    + Các câu hàm trong Query Builder có thể sử dụng được trong Eloquent bằng cách call Static, nhưng ngược lại Query Builder thì không sử dụng được các hàm trong Eloquent
+    + Tốc độ xử lý chậm hơn so với Query Builder
+    + Nói cách khác thì Eloquent ORM nó như là 1 bản nâng cấp từ Query Builder giúp cho các viết ngắn gọi dễ hiểu,cung cấp các phương thức tĩnh và các phương thức thêm mà Query Builder không có như softDelele, các scope, và các event boot
+--> Phần quan trọng nhất là nếu chúng ta muốn thay đổi cơ sở dữ liệu khác , thì DB::raw sẽ gây đau đầu cho chúng ta và trong trường hợp đó Laravel Eloquent sẽ giải quyết tất cả các vấn đề một cách đơn giản. Nó có thể xử lý các loại Database khác nhau.
+https://hocphp.info/laravel-framework-eloquent-orm-va-query-builder-co-ban-chua-biet/
 
 
 https://allaravel.com/laravel-tutorials/laravel-eloquent-orm-phan-1-thao-tac-voi-database-qua-eloquent-model/
+
+#Authen
+https://allaravel.com/laravel-tutorials/phan-quyen-nguoi-dung-voi-laravel-authorization/
+https://allaravel.com/laravel-tutorials/laravel-authentication-xac-thuc-nguoi-dung-that-don-gian/
 
 #Controller 
 - Tao FormRequest de validate : php artisan make:request UserRequest

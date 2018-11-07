@@ -30,8 +30,32 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['full_name'];
+
+    #mutator
     // public function setPasswordAttribute($password)
     // {   
     //     $this->attributes['password'] = bcrypt($password);
     // }
+     
+    #accessor : [get][Tên thuộc tính][Attribute]
+    public function getNameAttribute($value)
+    {
+        return ucfirst($value);
+    }
+
+    /**
+     * Lấy tên đầy đủ của người dùng
+     *
+     * @return bool
+     */
+    public function getFullNameAttribute()
+    {
+        return $this->attributes['name'] . '>>>' . $this->attributes['email'];
+    }
 }
