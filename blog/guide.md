@@ -56,10 +56,12 @@ Chú ý tham số thứ 2 của phương thức transaction() là số lần th�
     php artisan migrate
     php artisan migrate:refresh --> rollback toàn bộ CSDL đồng thời chạy lại luôn toàn bộ các file migrate của bạn
 
-- Seeder : tao du lieu (mau) dump vao csdl
-Tao file seeder : php artisan make:seeder <seeder-class-name>
-Them data vao csdl, chạy nội dung file DatabaseSeeder.php : php artisan db:seed
-Chay 1 file seeder cu the : php artisan db:seed --class=UserTableSeeder
+- Seeder and Model Factories : tao du lieu (mau) dump vao csdl
+    + Tao factory : php artisan make:factory SupplierFactory
+    https://viblo.asia/p/tim-hieu-ve-seeder-trong-laravel-bWrZn1MmKxw
+    + Tao file seeder : php artisan make:seeder <seeder-class-name>
+    + Them data vao csdl, chạy nội dung file DatabaseSeeder.php : php artisan db:seed
+    + Chay 1 file seeder cu the : php artisan db:seed --class=UserTableSeeder
 
 #Model
 - Create Post model with migration and resource controller : 
@@ -73,12 +75,13 @@ php artisan make:model Category -m
     + Mutator : thay đổi dữ liệu trước khi lưu xuống database
 - $casts (sử dụng trong model) : Chuyển đổi dạng dữ liệu của thuộc tính
     + Chuyển đổi dạng Array là rất hữu ích khi chúng ta làm việc với cột được lưu trữ ở dạng chuỗi JSON, khi thêm chuyển đổi dạng này vào $casts, nó sẽ tự động chuyển từ dữ liệu JSON sang thành mảng khi chúng ta truy cập vào thuộc tính của Model
+-->Avoid Accessors, Mutators & Query Scopes
 
 #Eloquent ORM và Query Builder : thao tác với CSDL
 - Query Builder
-    + Query Builder sử dụng PDO nhằm bảo vệ ưng dụng và tránh các lỗi về SQL injection.Query Builder xây dựng lớp Illuminate\Support\Facades\DBđể thực hiện các câu truy vấn.
+    + Query Builder sử dụng PDO nhằm bảo vệ ưng dụng và tránh các lỗi về SQL injection.Query Builder xây dựng lớp Illuminate\Support\Facades\DB để thực hiện các câu truy vấn.
     + Sử dụng thao tác trực tiếp với bảng
-    + Có câu lệnh viết phức tạp hơn nhưng cũng có thể thể thực hiện các truy vấn phức tạp
+    + Có câu lệnh viết phức tạp hơn nhưng cũng có thể thực hiện các truy vấn phức tạp
     + Tốc độ thực hiện truy vấn nhanh hơn
 - ORM(Object Relational Mapping) là một kỹ thuật lập trình dùng để chuyển đổi dữ liệu giữa một hệ thống không hướng đối tượng như cơ sở dữ liệu sang hệ thống hướng đối tượng như lập trình hướng đôi tượng trong PHP.
     + Mỗi bảng của database sẽ được ánh xạ qua ‘Model’, mỗi Model sẽ được kế thừa từ Illuminate\Database\Eloquent\Model;
@@ -88,10 +91,12 @@ php artisan make:model Category -m
     + Tốc độ xử lý chậm hơn so với Query Builder
     + Nói cách khác thì Eloquent ORM nó như là 1 bản nâng cấp từ Query Builder giúp cho các viết ngắn gọi dễ hiểu,cung cấp các phương thức tĩnh và các phương thức thêm mà Query Builder không có như softDelele, các scope, và các event boot
 --> Phần quan trọng nhất là nếu chúng ta muốn thay đổi cơ sở dữ liệu khác , thì DB::raw sẽ gây đau đầu cho chúng ta và trong trường hợp đó Laravel Eloquent sẽ giải quyết tất cả các vấn đề một cách đơn giản. Nó có thể xử lý các loại Database khác nhau.
+
 https://hocphp.info/laravel-framework-eloquent-orm-va-query-builder-co-ban-chua-biet/
-
-
 https://allaravel.com/laravel-tutorials/laravel-eloquent-orm-phan-1-thao-tac-voi-database-qua-eloquent-model/
+
+#Relationships
+https://appdividend.com/2017/10/11/laravel-eloquent-relationships/
 
 #Authen
 https://allaravel.com/laravel-tutorials/phan-quyen-nguoi-dung-voi-laravel-authorization/
@@ -126,6 +131,10 @@ php artisan queue:restart
 #Best practices : https://laravel-news.com/eloquent-tips-tricks
 - cache config, limit IO request : php artisan config:cache
 - cache route, ko su dung closure: php artisan route:cache
+- Avoid N+1 queries
+- Avoid Accessors, Mutators & Query Scopes
+- Storing Relationships in Variables: Try to reduce the relationship calls as much as possible.
+
 
 #Links
 https://www.groloop.com/en/laravel-5-4-19-roles-and-permissions-part-1/
@@ -146,12 +155,11 @@ npm run production
 // Chạy khi vừa dev, vừa chỉnh các file assets
 npm run watch
 
--xem danh sach routes:
-php artisan route:list
-
-- noted:
-+ $category->posts sẽ query DB để lấy ra tất cả các posts thuộc về category hiện tại sau đó dựng các model Post, đưa vào Collection sau đó duyệt từng phần tử của Collection đó để lấy ra bản ghi đầu tiên từ điều kiện first() của ta.
-+ $categoty->posts() thì như định nghĩa ở trên là return $this->hasMany(Post::class);, ta có thể thấy nó sẽ trả về instance của Category. Khi ta gọi $categoty->posts()->first() thì nó sẽ lấy 1 bản ghi duy nhất từ tầng database ra chứ không lấy tất cả bản ghi như $category->posts rồi mới lọc tiếp để lấy ra bản ghi đầu tiên nữa.
+- Noted:
+    + $category->posts sẽ query DB để lấy ra tất cả các posts thuộc về category hiện tại sau đó dựng các model Post, đưa vào Collection sau đó duyệt từng phần tử của Collection đó để lấy ra bản ghi đầu tiên từ điều kiện first() của ta.
+    + $categoty->posts() thì như định nghĩa ở trên là return $this->hasMany(Post::class);, ta có thể thấy nó sẽ trả về instance của Category. Khi ta gọi $categoty->posts()->first() thì nó sẽ lấy 1 bản ghi duy nhất từ tầng database ra chứ không lấy tất cả bản ghi như $category->posts rồi mới lọc tiếp để lấy ra bản ghi đầu tiên nữa.
+    + Xem danh sach routes: php artisan route:list
+    + Thao tac voi model qua console : php artisan tinker
 
 - Eager load :
 

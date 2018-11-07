@@ -12,11 +12,21 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMailablePost;
 use App\Mail\OrderShipped;
 use App\User;
+use App\Phone;
+use App\Item;
+use App\Order;
 
 class DevController extends Controller
 {
     function __construct () {
 
+    }
+
+    public function test($value='')
+    {
+        $user = \App\Order::find(1)->user;
+
+        return response()->json($user);
     }
 
 	public function testEvent(){
@@ -145,5 +155,44 @@ class DevController extends Controller
         echo "Thời gian thực hiện QueryBuilder: ", bcsub($end_time, $start_time, 4), PHP_EOL;
         echo "Bộ nhớ sử dụng (kb): ", memory_get_peak_usage(true)/1024, PHP_EOL;
         echo '<br>------<br>';
+    }
+
+    public function testRelationships($value='')
+    {
+        #One to One - start
+        //get object
+        // $phone = User::find(1)->phone;
+        // $user = Phone::find(1)->user;
+        // //create record Phone
+        // $user = User::find(1);
+        // $phone = new Phone;
+        // $phone->phone = '9429343852';
+        // $user->phone()->save($phone);
+        //update Phone
+        // $phone = Phone::find(1);
+        // $user = User::find(10);
+        // $phone->user()->associate($user)->save();
+        #One to One - end
+
+        #One to Many - start
+        // $item = Item::find(100);
+        // $comment1 = new Order;
+        // $comment1->user_id = 1;
+        // $comment2 = new Order;
+        // $comment2->user_id = 1;
+        // $item = $item->orders()->saveMany([$comment1, $comment2]);
+        #One to Many - end
+
+        #Many to Many - start
+        //create record in table user_item
+        // $user = User::find(2);
+        // $roleIds = [1, 2];
+        // $user->items()->attach($roleIds);
+
+        //update record in table user_item
+        $user = User::find(30);
+        $roleIds = [1, 2];
+        $user->items()->sync($roleIds);
+        #Many to Many - end
     }
 }

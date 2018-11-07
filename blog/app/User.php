@@ -39,10 +39,10 @@ class User extends Authenticatable
 
     #mutator
     // public function setPasswordAttribute($password)
-    // {   
+    // {
     //     $this->attributes['password'] = bcrypt($password);
     // }
-     
+
     #accessor : [get][Tên thuộc tính][Attribute]
     public function getNameAttribute($value)
     {
@@ -57,5 +57,28 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return $this->attributes['name'] . '>>>' . $this->attributes['email'];
+    }
+
+
+    #One To Many Relationships
+    public function orders(){
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the phone record associated with the user.
+     */
+
+    public function phone()
+    {
+        return $this->hasOne('App\Phone');
+    }
+
+    /**
+    * The iems that belong to the user.
+    */
+    public function items()
+    {
+        return $this->belongsToMany(Item::class, 'user_item');
     }
 }

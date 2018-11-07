@@ -104,3 +104,7 @@ Route::get('test_benmark', 'DevController@testBenmarkBuildAndORM');
 #Accessor
 Route::get('test_accessor', 'DevController@testAccessor');
 
+#Relationships
+Route::get('test', 'DevController@test');
+Route::get('test-relationship', 'DevController@testRelationships');
+
